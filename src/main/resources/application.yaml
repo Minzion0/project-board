@@ -46,11 +46,11 @@ spring:
       detection-strategy: annotated
 
 ---
-
-spring:
-  config:
-    activate:
-      on-profile: testdb #???? ?? ??? ??
+#
+#spring:
+#  config:
+#    activate:
+#      on-profile: testdb #???? ?? ??? ??
 #  test.database.replace: none
 #
 #  datasource:
