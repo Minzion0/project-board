@@ -2,8 +2,10 @@ package com.study.projectboard.repository;
 
 
 
+
 import com.study.projectboard.config.JpaConfig;
 import com.study.projectboard.domain.Article;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 //@ActiveProfiles("testdb")//프로필 변경
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)//이것을 적용해주어야 테스트 디비를 자동으로 연결하지 않고 yaml에서 설정한 경로로 연결
+@Disabled("Spring Data REST 통합테스트는 불필요함으로 제외시킴")
 @DisplayName("JPA 연결 테스트")
 @Import(JpaConfig.class)
 @DataJpaTest
