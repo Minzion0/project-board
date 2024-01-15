@@ -20,11 +20,8 @@ import java.util.Objects;
         @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy")
 })
-@EntityListeners(AuditingEntityListener.class)//이 entity 에서도 auditing을
-                                            // 사용해준다는 표시 이것을 해주어야
-                                    //modifiedBy 나 그런것들이 자동으로 입력된다.
 @Entity
-public class ArticleComment {
+public class ArticleComment extends AuditingFields {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,21 +35,7 @@ public class ArticleComment {
     private String content;//본문
 
 
-    @CreatedDate
-    @Column(nullable = false)
-    private LocalDateTime createdAt;//생성일시
 
-    @CreatedBy
-    @Column(nullable = false,length = 100)
-    private String createdBy;//생성자
-
-    @LastModifiedDate
-    @Column(nullable = false)
-    private LocalDateTime modifiedAt;//수정일시
-
-    @LastModifiedBy
-    @Column(nullable = false,length = 100)
-    private String modifiedBy;//수정자
 
     protected ArticleComment() {
     }
