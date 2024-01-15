@@ -24,11 +24,8 @@ import java.util.Set;
         @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy")
 })
-@EntityListeners(AuditingEntityListener.class)//이 entity 에서도 auditing을
-                                            // 사용해준다는 표시 이것을 해주어야
-                                            //modifiedBy 나 그런것들이 자동으로 입력된다.
 @Entity
-public class Article {
+public class Article extends AuditingFields{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
