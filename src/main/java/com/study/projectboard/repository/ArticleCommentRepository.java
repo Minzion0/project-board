@@ -25,4 +25,5 @@ public interface ArticleCommentRepository extends
         bindings.bind(root.createdAt).first(DateTimeExpression::eq);//string 이 아니라 datetime 타입이라 eq로 동일 검사를 진행 시분초 모두 같은것만 검색
 
     }
+
 }
