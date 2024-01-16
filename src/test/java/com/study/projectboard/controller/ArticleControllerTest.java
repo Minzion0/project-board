@@ -34,7 +34,7 @@ class ArticleControllerTest {
                 .andExpect(model().attributeExists("articles"));//넘어오는 model 안에 articles의 데이터가 넘어오는지.
     }
 
-    @Disabled("구현중")
+
     @DisplayName("[view][Get] 게시글 상세 페이지 - 정상 호출")
     @Test
     public void givenNothing_ArticleleView_then()throws Exception{
