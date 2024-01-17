@@ -5,6 +5,7 @@ package com.study.projectboard.repository;
 
 import com.study.projectboard.config.JpaConfig;
 import com.study.projectboard.domain.Article;
+import com.study.projectboard.domain.UserAccount;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,15 +29,19 @@ class JpaRepositoryTest {
 
     private final ArticleRepository articleRepository;
     private  final ArticleCommentRepository articleCommentRepository;
+    private final UserAccountRepository userAccountRepository;
 
     public JpaRepositoryTest(
             @Autowired
             ArticleRepository articleRepository,
             @Autowired
-            ArticleCommentRepository articleCommentRepository
+            ArticleCommentRepository articleCommentRepository,
+            @Autowired
+            UserAccountRepository userAccountRepository
     ) {
         this.articleRepository = articleRepository;
         this.articleCommentRepository = articleCommentRepository;
+        this.userAccountRepository=userAccountRepository;
     }
 
 
@@ -52,20 +57,22 @@ class JpaRepositoryTest {
                 .isNotNull()
                 .hasSize(123);
     }
+
     @DisplayName("insert 테스트")
     @Test
     void givenTestData_whenInserting_thenWorksFine(){
         //given
-        long count = articleRepository.count();
-        Article article = Article.of("new article", "new content", "#spring");
+        long previousCount = articleRepository.count();
+        UserAccount userAccount = userAccountRepository.save(UserAccount.of("uno", "pw", null, null, null));
+        Article article = Article.of(userAccount, "new article", "new content", "#spring");
+
         //when
 
-        Article save = articleRepository.save(article);
-
-
+        articleRepository.save(article);
 
         //then
-        assertThat(articleRepository.count()).isEqualTo(count+1);
+
+        assertThat(articleRepository.count()).isEqualTo(previousCount + 1);
     }
 
     @DisplayName("update 테스트")
