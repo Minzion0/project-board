@@ -20,7 +20,14 @@ public interface ArticleRepository extends
 {
 
 
-    Page<Article> findByTitle(String title, Pageable pageable);
+    Page<Article> findByTitleContaining(String title, Pageable pageable);
+    Page<Article> findByContentContaining(String content, Pageable pageable);
+    Page<Article> findByUserAccount_UserIdContaining(String userId, Pageable pageable);
+    Page<Article> findByUserAccount_NicknameContaining(String nickName, Pageable pageable);
+    Page<Article> findByHashtag(String hashTag, Pageable pageable);
+
+
+
 
 
     @Override//말그대로 커스터 마이징한 검색을 구현할수있는 메소드
