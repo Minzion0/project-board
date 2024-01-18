@@ -37,7 +37,7 @@ class ArticleCommentServicesTest {
     @Mock
     private ArticleRepository articleRepository;
 
-    @Disabled
+
     @DisplayName("게시글 id로 조회하면 해당 게시글 댓글 리스트")
     @Test
     void given_whenSearchComment_thenComments(){
