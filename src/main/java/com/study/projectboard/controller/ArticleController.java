@@ -39,7 +39,6 @@ public class ArticleController {
                            @PageableDefault(size = 10,sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable ){
         Page<ArticleResponse> articles = articleService.searchArticles(searchType, searchKeyword, pageable).map(ArticleResponse::from);
         List<Integer> paginationBarNumbers = paginationService.getPaginationBarNumbers(articles.getNumber(), articles.getTotalPages());
-
         map.addAttribute("articles", articles);
         map.addAttribute("paginationBarNumbers", paginationBarNumbers);
         return "articles/index";
