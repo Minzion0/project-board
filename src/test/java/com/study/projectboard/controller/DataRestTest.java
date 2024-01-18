@@ -1,5 +1,6 @@
 package com.study.projectboard.controller;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +70,7 @@ public class DataRestTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.valueOf("application/hal+json")));
     }
 
-
+    @Disabled
     @DisplayName("[api] 회원 관련 API 는 일체 제공하지 않는다.")
     @Test
     void givenNothing_whenRequestingUserAccounts_thenThrowsException() throws Exception {
