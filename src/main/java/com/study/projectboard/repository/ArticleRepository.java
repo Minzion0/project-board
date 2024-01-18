@@ -4,6 +4,7 @@ import com.querydsl.core.types.dsl.DateTimeExpression;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.study.projectboard.domain.Article;
 import com.study.projectboard.domain.QArticle;
+import com.study.projectboard.repository.querydsl.ArticleRepositoryCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,9 +13,12 @@ import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import java.util.List;
+
 @RepositoryRestResource// spring data rest 를 사용하기 위해 repository 에 해당 어노테이션을 넣어준다.
 public interface ArticleRepository extends
         JpaRepository<Article,Long>,
+        ArticleRepositoryCustom,
         QuerydslPredicateExecutor<Article>,//엔티티 안에 있는 모든 필드에 대한 기본 검색 기능을 추가해준다.
         QuerydslBinderCustomizer<QArticle>//binder 에는 일반 클래스가 아니라 Q클래스를 넣어준다 Q클래스는 기존 엔티에 query sql이 자동으로 생성해준다.
 {
@@ -42,4 +46,6 @@ public interface ArticleRepository extends
         bindings.bind(root.createdAt).first(DateTimeExpression::eq);//string 이 아니라 datetime 타입이라 eq로 동일 검사를 진행 시분초 모두 같은것만 검색
 
     }
+
+
 }

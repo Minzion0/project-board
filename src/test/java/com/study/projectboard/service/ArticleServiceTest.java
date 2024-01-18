@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -63,6 +64,37 @@ class ArticleServiceTest {
         // Then
         assertThat(articles).isEmpty();
         then(articleRepository).should().findByTitleContaining(searchKeyword, pageable);
+    }
+
+    @DisplayName("검색어 없이 게시글을 해시태그 검색하면 빈 페이지를 반환.")
+    @Test
+    void givenNOSearchParameters_whenSearchingArticlesHashtag_thenReturnsArticlePage() {
+        // Given
+
+        Pageable pageable = Pageable.ofSize(20);
+
+        // When
+        Page<ArticleDto> articles = sut.searchArticlesViaHashtag(null, pageable);
+
+        // Then
+        assertThat(articles).isEqualTo(Page.empty(pageable));
+        then(articleRepository).shouldHaveNoInteractions();
+    }
+
+    @DisplayName("게시글을 해시태그 검색하면 게시글 페이지를 반환 한다.")
+    @Test
+    void givenSearchParameters_whenSearchingArticlesHashtag_thenReturnsArticlePage() {
+        // Given
+
+        Pageable pageable = Pageable.ofSize(20);
+        String hashtag = "#java";
+        given(articleRepository.findByHashtag(hashtag,pageable)).willReturn(Page.empty(pageable));
+        // When
+        Page<ArticleDto> articles = sut.searchArticlesViaHashtag(hashtag, pageable);
+
+        // Then
+        assertThat(articles).isEqualTo(Page.empty(pageable));
+        then(articleRepository).should().findByHashtag(hashtag,pageable);
     }
 
     @DisplayName("게시글 을 조회하면 게시글을 반환")
@@ -168,6 +200,21 @@ class ArticleServiceTest {
         // Then
 
         then(articleRepository).should().deleteById(articleId);
+    }
+
+    @DisplayName("해시태그를 조회 하면, 유니크 해시태그 리스트를 반환")
+    @Test
+    void givenNothing_whencalling_thenReturnsHashtags() {
+        // Given
+
+        List<String> expectedHashtags = List.of("#java","#spring","#boot");
+        given(articleRepository.findByAllDistinctHashtags()).willReturn(expectedHashtags);
+        // When
+        List<String> actualHashtags=sut.getHashtgs();
+
+        // Then
+        assertThat(actualHashtags).isEqualTo(expectedHashtags);
+        then(articleRepository).should().findByAllDistinctHashtags();
     }
 
     private UserAccount createUserAccount() {
