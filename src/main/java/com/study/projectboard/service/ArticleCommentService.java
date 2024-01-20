@@ -4,6 +4,7 @@ import com.study.projectboard.domain.Article;
 import com.study.projectboard.domain.ArticleComment;
 import com.study.projectboard.domain.UserAccount;
 import com.study.projectboard.dto.ArticleCommentDto;
+import com.study.projectboard.dto.UserAccountDto;
 import com.study.projectboard.repository.ArticleCommentRepository;
 import com.study.projectboard.repository.ArticleRepository;
 import com.study.projectboard.repository.UserAccountRepository;
@@ -43,15 +44,18 @@ public class ArticleCommentService {
 
     public void updateArticleComment(ArticleCommentDto dto) {
         try {
+            UserAccount userAccount = userAccountRepository.getReferenceById(dto.userAccountDto().userId());
             ArticleComment articleComment = articleCommentRepository.getReferenceById(dto.id());
-            if (dto.content() != null) { articleComment.setContent(dto.content()); }
+            if (articleComment.getUserAccount().equals(userAccount)){
+                if (dto.content() != null) { articleComment.setContent(dto.content()); }
+            }
 
         }catch (EntityNotFoundException e){
-            log.warn("댓글 업데이트 실패. 댓글을 찾을 수 없습니다 - dto: {}", dto);
+            log.warn("댓글 업데이트 실패. 댓글정보를  찾을 수 없습니다 - {}", e.getLocalizedMessage());
         }
     }
 
-    public void deleteArticleComment(Long articleCommentId) {
-        articleCommentRepository.deleteById(articleCommentId);
+    public void deleteArticleComment( Long articleCommentId,String userId) {
+        articleCommentRepository.deleteByIdAndUserAccount_UserId(articleCommentId,userId);
     }
 }
