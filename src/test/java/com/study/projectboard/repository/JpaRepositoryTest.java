@@ -13,17 +13,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 //@ActiveProfiles("testdb")//프로필 변경
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)//이것을 적용해주어야 테스트 디비를 자동으로 연결하지 않고 yaml에서 설정한 경로로 연결
-@Disabled("Spring Data REST 통합테스트는 불필요함으로 제외시킴")
+
 @DisplayName("JPA 연결 테스트")
-@Import(JpaConfig.class)
+@Import(JpaRepositoryTest.TestJpaConfig.class)
 @DataJpaTest
 class JpaRepositoryTest {
 
@@ -105,6 +110,16 @@ class JpaRepositoryTest {
         assertThat(articleCommentRepository.count()).isEqualTo(articleCommentCount-deleteCommentSize);
 
 
+
+    }
+
+    @EnableJpaAuditing
+    @TestConfiguration
+    public static class TestJpaConfig{
+        @Bean
+        public AuditorAware<String > auditorAware(){
+            return ()-> Optional.of("minzino");
+        }
 
     }
 
