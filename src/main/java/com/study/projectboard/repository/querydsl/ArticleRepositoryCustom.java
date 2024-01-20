@@ -4,5 +4,6 @@ import java.util.List;
 
 public interface ArticleRepositoryCustom {
 
-    List<String> findByAllDistinctHashtags();
+    List<String> findAllDistinctHashtags();
+
 }
