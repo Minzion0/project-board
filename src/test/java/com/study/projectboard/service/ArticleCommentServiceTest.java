@@ -7,8 +7,8 @@ import com.study.projectboard.dto.ArticleCommentDto;
 import com.study.projectboard.dto.UserAccountDto;
 import com.study.projectboard.repository.ArticleCommentRepository;
 import com.study.projectboard.repository.ArticleRepository;
+import com.study.projectboard.repository.UserAccountRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +19,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,15 +26,18 @@ import static org.mockito.BDDMockito.*;
 
 @DisplayName("비지니스 로직  - 댓글")
 @ExtendWith(MockitoExtension.class)
-class ArticleCommentServicesTest {
+class ArticleCommentServiceTest {
 
     @InjectMocks
-    private ArticleCommentServices sut;
+    private ArticleCommentService sut;
 
     @Mock
     private ArticleCommentRepository articleCommentRepository;
     @Mock
     private ArticleRepository articleRepository;
+
+    @Mock
+    public UserAccountRepository userAccountRepository;
 
 
     @DisplayName("게시글 id로 조회하면 해당 게시글 댓글 리스트")
@@ -60,18 +62,21 @@ class ArticleCommentServicesTest {
     void given_whenSavingComment_thenSavingComment(){
         ArticleCommentDto dto = createArticleCommentDto("댓글");
         given(articleRepository.getReferenceById(dto.articleId())).willReturn(createArticle());
+        given(userAccountRepository.getReferenceById(dto.userAccountDto().userId())).willReturn(createUserAccount());
         given(articleCommentRepository.save(any(ArticleComment.class))).willReturn(null);
 
 
         sut.saveArticleComment(dto);
 
         then(articleRepository).should().getReferenceById(dto.articleId());
+        then(userAccountRepository).should().getReferenceById(dto.userAccountDto().userId());
         then(articleCommentRepository).should().save(any(ArticleComment.class));
     }
 
     @DisplayName("댓글 저장을 시도했는데 맞는 게시글이 없으면, 경고 로그를 찍고 아무것도 안 한다.")
     @Test
     void givenNonexistentArticle_whenSavingArticleComment_thenLogsSituationAndDoesNothing() {
+
         // Given
         ArticleCommentDto dto = createArticleCommentDto("댓글");
         given(articleRepository.getReferenceById(dto.articleId())).willThrow(EntityNotFoundException.class);
@@ -81,7 +86,9 @@ class ArticleCommentServicesTest {
 
         // Then
         then(articleRepository).should().getReferenceById(dto.articleId());
+        then(userAccountRepository).shouldHaveNoInteractions();
         then(articleCommentRepository).shouldHaveNoInteractions();
+
     }
 
     @DisplayName("댓글 정보를 입력하면, 댓글을 수정한다.")
@@ -115,7 +122,11 @@ class ArticleCommentServicesTest {
         sut.updateArticleComment(dto);
 
         // Then
+
         then(articleCommentRepository).should().getReferenceById(dto.id());
+
+
+
     }
 
     @DisplayName("댓글 ID를 입력하면, 댓글을 삭제한다.")
@@ -148,7 +159,6 @@ class ArticleCommentServicesTest {
 
     private UserAccountDto createUserAccountDto() {
         return UserAccountDto.of(
-                1L,
                 "uno",
                 "password",
                 "uno@mail.com",
