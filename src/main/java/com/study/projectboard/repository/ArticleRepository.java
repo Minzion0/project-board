@@ -27,24 +27,18 @@ public interface ArticleRepository extends
     Page<Article> findByTitleContaining(String title, Pageable pageable);
     Page<Article> findByContentContaining(String content, Pageable pageable);
     Page<Article> findByUserAccount_UserIdContaining(String userId, Pageable pageable);
-    Page<Article> findByUserAccount_NicknameContaining(String nickName, Pageable pageable);
-    Page<Article> findByHashtag(String hashTag, Pageable pageable);
+    Page<Article> findByUserAccount_NicknameContaining(String nickname, Pageable pageable);
+    Page<Article> findByHashtag(String hashtag, Pageable pageable);
 
-
-
-
-
-    @Override//말그대로 커스터 마이징한 검색을 구현할수있는 메소드
-    default void customize(QuerydslBindings bindings, QArticle root){
-        bindings.excludeUnlistedProperties(true);//
-        bindings.including(root.title,root.content,root.hashtag,root.createdAt,root.createdBy);
-        //bindings.bind(root.title).first((StringExpression::likeIgnoreCase)); // 검색 쿼리 like '${v}'로 검색
-        bindings.bind(root.title).first(StringExpression::containsIgnoreCase);// 검색 쿼리 like '%${v}%'
+    @Override
+    default void customize(QuerydslBindings bindings, QArticle root) {
+        bindings.excludeUnlistedProperties(true);
+        bindings.including(root.title, root.content, root.hashtag, root.createdAt, root.createdBy);
+        bindings.bind(root.title).first(StringExpression::containsIgnoreCase);
         bindings.bind(root.content).first(StringExpression::containsIgnoreCase);
         bindings.bind(root.hashtag).first(StringExpression::containsIgnoreCase);
+        bindings.bind(root.createdAt).first(DateTimeExpression::eq);
         bindings.bind(root.createdBy).first(StringExpression::containsIgnoreCase);
-        bindings.bind(root.createdAt).first(DateTimeExpression::eq);//string 이 아니라 datetime 타입이라 eq로 동일 검사를 진행 시분초 모두 같은것만 검색
-
     }
 
 
