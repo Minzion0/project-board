@@ -48,10 +48,15 @@ spring:
     decoupled-logic: true
 ---
 ## 헤로쿠 프로필 설정
+
+server:
+  port:$PORT
+
 spring:
   config.activate.on-profile: heroku
   datasource:
     url: ${JAWSDB_MARIA_URL}
+    driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: create
