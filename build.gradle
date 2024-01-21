@@ -85,3 +85,10 @@ jar{
             attributes('Main-Class': 'com.study.projectboard.ProjectBoardApplication')
     }
 }
+
+bootJar{
+    destinationDirectory=file("./target")
+    archiveBaseName = "project-board"
+    archiveFileName = "project-board.jar"
+    archiveVersion = "1.1"
+}
