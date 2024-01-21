@@ -86,8 +86,3 @@ jar{
     }
 }
 
-bootJar{
-    archiveBaseName = "project-board"
-    archiveFileName = "project-board.jar"
-    archiveVersion = "1.1"
-}
