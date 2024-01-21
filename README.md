@@ -31,4 +31,5 @@ Spring Boot
 
 ## 데모 페이지
 
-https://projcet-board-minzino-05b155f41f4c.herokuapp.com/
+https://project-board-minzino-d66a28900e25.herokuapp.com/
+
