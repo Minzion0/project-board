@@ -1,3 +1,2 @@
 
-
-web: java $JAVA_OPTS -Dserver.port=$PORT -Dspring.profiles.active=heroku -jar "target/project-board.jar"
+web: java $JAVA_OPTS -Dserver.port=$PORT -Dspring.profiles.active=heroku -jar build/libs/project-board.jar
