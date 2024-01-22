@@ -48,10 +48,6 @@ spring:
     decoupled-logic: true
 ---
 ## 헤로쿠 프로필 설정
-
-server:
-  port:$PORT
-
 spring:
   config.activate.on-profile: heroku
   datasource:
