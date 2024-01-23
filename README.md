@@ -27,9 +27,11 @@ Spring Boot
 
 * QueryDSL 5.0.0
 * Bootstrap 5.3.0
-* Heroku
+* ~~Heroku~~
+* AWS
+* EC2
 
 ## 데모 페이지
 
-https://project-board-minzino-d66a28900e25.herokuapp.com/
+
 
