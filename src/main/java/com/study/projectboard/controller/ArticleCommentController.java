@@ -25,7 +25,7 @@ public class ArticleCommentController {
 
         articleCommentService.saveArticleComment(
                 articleCommentRequest.toDto(boardPrincipal.toDto()));
-        return "redirect:/articles/"+articleCommentRequest.articleId();
+        return "redirect:articles/"+articleCommentRequest.articleId();
     }
 
     @PostMapping("/{commentId}/delete")
@@ -34,7 +34,7 @@ public class ArticleCommentController {
             @PathVariable Long commentId, Long articleId){
         articleCommentService.deleteArticleComment(commentId,boardPrincipal.toDto().userId());
 
-        return "redirect:/articles/"+articleId;
+        return "redirect:articles/"+articleId;
     }
 
 

@@ -14,9 +14,10 @@ logging:
     org.springframework.web.servlet: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
 
-spring:
-  datasource:
 
+spring:
+
+  datasource:
     url: jdbc:mariadb://localhost:3306/board
     username: minzino
     password: thisisTESTpw!@#$
@@ -32,10 +33,6 @@ spring:
       hibernate:
         format_sql: true #???? sql?? ??? ??
         default_batch_fetch_size: 100 #n+1 ??? ?????? ??? ??? ???? id in ??? ???? ?? 100??? ??? ???? ??.
-
-  h2:
-    console:
-      enabled: false
 
   sql:
     init:

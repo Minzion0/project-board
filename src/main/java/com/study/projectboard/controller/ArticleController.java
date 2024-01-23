@@ -111,7 +111,7 @@ public class ArticleController {
 
         articleService.updateArticle(articleId, articleRequest.toDto(boardPrincipal.toDto()));
 
-        return "redirect:/articles/" + articleId;
+        return "redirect:articles/" + articleId;
     }
 
     @PostMapping ("/{articleId}/delete")
@@ -122,7 +122,7 @@ public class ArticleController {
 
         articleService.deleteArticle(articleId,boardPrincipal.userName());
 
-        return "redirect:/articles";
+        return "redirect:articles";
     }
 
 }
