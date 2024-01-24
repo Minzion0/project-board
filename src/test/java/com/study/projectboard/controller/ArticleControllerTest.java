@@ -6,6 +6,7 @@ import com.study.projectboard.domain.type.FormStatus;
 import com.study.projectboard.domain.type.SearchType;
 import com.study.projectboard.dto.ArticleDto;
 import com.study.projectboard.dto.ArticleWithCommentsDto;
+import com.study.projectboard.dto.HashtagDto;
 import com.study.projectboard.dto.UserAccountDto;
 import com.study.projectboard.dto.request.ArticleRequest;
 import com.study.projectboard.dto.response.ArticleResponse;
@@ -67,6 +68,7 @@ class ArticleControllerTest {
         // Given
         given(articleService.searchArticles(eq(null), eq(null), any(Pageable.class))).willReturn(Page.empty());
         given(paginationService.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(0, 1, 2, 3, 4));
+
 
         // When & Then
         mvc.perform(get("/articles"))
@@ -251,7 +253,7 @@ class ArticleControllerTest {
     @Test
     void givenNewArticleInfo_whenRequesting_thenSavesNewArticle() throws Exception {
         // Given
-        ArticleRequest articleRequest = ArticleRequest.of("new title", "new content", "#new");
+        ArticleRequest articleRequest = ArticleRequest.of("new title", "new content");
         willDoNothing().given(articleService).saveArticle(any(ArticleDto.class));
 
         // When & Then
@@ -292,7 +294,7 @@ class ArticleControllerTest {
     void givenUpdatedArticleInfo_whenRequesting_thenUpdatesNewArticle() throws Exception {
         // Given
         long articleId = 1L;
-        ArticleRequest articleRequest = ArticleRequest.of("new title", "new content", "#new");
+        ArticleRequest articleRequest = ArticleRequest.of("new title", "new content");
         willDoNothing().given(articleService).updateArticle(eq(articleId), any(ArticleDto.class));
 
         // When & Then
@@ -333,7 +335,7 @@ class ArticleControllerTest {
                 createUserAccountDto(),
                 "title",
                 "content",
-                "#java"
+                Set.of(HashtagDto.of("java"))
         );
     }
 
@@ -347,7 +349,7 @@ class ArticleControllerTest {
                 Set.of(),
                 "title",
                 "content",
-                "#java",
+                Set.of(HashtagDto.of("java")),
                 LocalDateTime.now(),
                 "minzino",
                 LocalDateTime.now(),

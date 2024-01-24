@@ -11,16 +11,12 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @ToString(callSuper = true)
 @Table(indexes = {
         @Index(columnList = "title"),
-        @Index(columnList = "hashtag"),
         @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy")
 })
@@ -42,8 +38,16 @@ public class Article extends AuditingFields{
     @Column(nullable = false,length = 10000)
     private String content;//본문
 
+    @ToString.Exclude
     @Setter
-    private String hashtag;//헤시태그
+                // cascade 옵션을 insert,update 할때만 사용하겠다는 옵션
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @JoinTable(//관계의 주인 조인 테이블 생성
+            name = "article_hashtag",//테이블 이름
+            joinColumns = @JoinColumn(name = "articleId"),//컬럼명
+            inverseJoinColumns = @JoinColumn(name = "hashtagId") // 조인할 상대 컬럼 이름
+    )
+    private Set<Hashtag> hashtags = new LinkedHashSet<>();//헤시태그
 
     @ToString.Exclude
     @OrderBy("createdAt DESC")
@@ -54,14 +58,39 @@ public class Article extends AuditingFields{
 
     protected Article() {}
 
-    private Article(UserAccount userAccount, String title, String content, String hashtag) {
+    private Article(UserAccount userAccount, String title, String content) {
         this.userAccount = userAccount;
         this.title = title;
         this.content = content;
-        this.hashtag = hashtag;
+
     }
-    public static Article of(UserAccount userAccount, String title, String content, String hashtag) {
-        return new Article(userAccount, title, content, hashtag);
+    public static Article of(UserAccount userAccount, String title, String content) {
+        return new Article(userAccount, title, content);
+    }
+
+    //해시태그 관리 편의 메소드
+
+    /**
+     * 해시태그 하나 추가
+     * @param hashtag
+     */
+    public void addHashtags(Hashtag hashtag){
+        this.getHashtags().add(hashtag);
+    }
+
+    /**
+     * 컬랙션단위 해시태그 추가
+     * @param hashtags
+     */
+    public void addHashtags(Collection<Hashtag> hashtags){
+        this.getHashtags().addAll(hashtags);
+    }
+
+    /**
+     * 해당 게시글 연관된 태그 비우기
+     */
+    public void clearHashtags(){
+        this.getHashtags().clear();
     }
 
     //skeleton code
@@ -70,7 +99,7 @@ public class Article extends AuditingFields{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Article article)) return false;
-        return this.getId() != null && id.equals(this.getId());
+        return this.getId() != null && this.getId().equals(article.getId());
     }
 
 
