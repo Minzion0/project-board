@@ -18,10 +18,9 @@ logging:
 spring:
 
   datasource:
-    url: jdbc:mariadb://localhost:3306/board
-    username: minzino
+    url: jdbc:postgresql://localhost:5432/board
+    username: imin-yong
     password: thisisTESTpw!@#$
-    driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     open-in-view: false
     defer-datasource-initialization: true
