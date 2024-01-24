@@ -2,6 +2,7 @@ package com.study.projectboard.service;
 
 import com.study.projectboard.domain.Article;
 import com.study.projectboard.domain.ArticleComment;
+import com.study.projectboard.domain.Hashtag;
 import com.study.projectboard.domain.UserAccount;
 import com.study.projectboard.dto.ArticleCommentDto;
 import com.study.projectboard.dto.UserAccountDto;
@@ -21,7 +22,9 @@ import org.springframework.security.test.context.support.WithUserDetails;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
+import static com.study.projectboard.domain.QArticle.article;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
@@ -177,7 +180,7 @@ class ArticleCommentServiceTest {
 
     private ArticleComment createArticleComment(String content) {
         return ArticleComment.of(
-                Article.of(createUserAccount(), "title", "content", "hashtag"),
+                createArticle(),
                 createUserAccount(),
                 content
         );
@@ -194,12 +197,19 @@ class ArticleCommentServiceTest {
     }
 
     private Article createArticle() {
-        return Article.of(
+        Article article = Article.of(
                 createUserAccount(),
                 "title",
-                "content",
-                "#java"
+                "content"
         );
+
+    article.addHashtags(Set.of(createHashtag(article)));
+
+        return article;
+}
+
+    private Hashtag createHashtag(Article article) {
+        return Hashtag.of("java");
     }
 
 }
