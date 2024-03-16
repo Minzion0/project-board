@@ -26,21 +26,19 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
                 .distinct()
                 .select(article.hashtags.any().hashtagName)
                 .fetch();
-
     }
 
     @Override
-    public Page<Article> findByHashtagNames(Collection<String> hashtagName, Pageable pageable) {
-        QArticle article = QArticle.article;
+    public Page<Article> findByHashtagNames(Collection<String> hashtagNames, Pageable pageable) {
         QHashtag hashtag = QHashtag.hashtag;
+        QArticle article = QArticle.article;
 
         JPQLQuery<Article> query = from(article)
                 .innerJoin(article.hashtags, hashtag)
-                .where(hashtag.hashtagName.in(hashtagName));
-
+                .where(hashtag.hashtagName.in(hashtagNames));
         List<Article> articles = getQuerydsl().applyPagination(pageable, query).fetch();
 
-        return new PageImpl<>(articles,pageable, query.fetchCount());
-
+        return new PageImpl<>(articles, pageable, query.fetchCount());
     }
+
 }
