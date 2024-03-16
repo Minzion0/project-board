@@ -8,9 +8,15 @@
         <attr sel="#nickname" th:text="*{nickname}" />
         <attr sel="#email" th:text="*{email}" />
         <attr sel="#created-at" th:datetime="*{createdAt}" th:text="*{#temporals.format(createdAt, 'yyyy-MM-dd HH:mm:ss')}" />
-        <attr sel="#hashtag" th:text="*{hashtag}" />
+        <attr sel="#hashtag" th:each="hashtag : ${article.hashtags}">
+            <attr sel="a"
+                  th:text="'#' + ${hashtag}"
+                  th:href="@{/articles(searchType=${searchTypeHashtag},searchValue=${hashtag})}"
+            />
+        </attr>
+
         <attr sel="#article-content/pre" th:text="*{content}" />
-          <!-- 작성자에게만 삭제 및 수정이 보이게 하는 옵션 if 부분 -->
+
         <attr sel="#article-buttons" th:if="${#authorization.expression('isAuthenticated()')} and *{userId} == ${#authentication.name}">
             <attr sel="#delete-article-form" th:action="'/articles/' + *{id} + '/delete'" th:method="post">
                 <attr sel="#update-article" th:href="'/articles/' + *{id} + '/form'" />
@@ -21,7 +27,6 @@
         <attr sel="#comment-form" th:action="@{/comments/new}" th:method="post">
             <attr sel="#comment-textbox" th:name="content" />
         </attr>
-
 
         <attr sel="#article-comments" th:remove="all-but-first">
             <attr sel="li[0]" th:each="articleComment : ${articleComments}">
