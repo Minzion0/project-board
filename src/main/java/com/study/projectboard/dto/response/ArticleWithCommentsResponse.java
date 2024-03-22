@@ -1,11 +1,12 @@
 package com.study.projectboard.dto.response;
 
+import com.study.projectboard.dto.ArticleCommentDto;
 import com.study.projectboard.dto.ArticleWithCommentsDto;
 import com.study.projectboard.dto.HashtagDto;
 
 import java.time.LocalDateTime;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 public record ArticleWithCommentsResponse(
         Long id,
@@ -40,10 +41,32 @@ public record ArticleWithCommentsResponse(
                 dto.userAccountDto().email(),
                 nickname,
                 dto.userAccountDto().userId(),
-                dto.articleCommentDtos().stream()
-                        .map(ArticleCommentResponse::from)
-                        .collect(Collectors.toCollection(LinkedHashSet::new))
+                organizeChildComments(dto.articleCommentDtos())
         );
+    }
+
+    private static Set<ArticleCommentResponse> organizeChildComments(Set<ArticleCommentDto> dtos){
+
+        Map<Long,ArticleCommentResponse> map = dtos.stream()//map 으로 변환 과정
+                .map(ArticleCommentResponse::from)
+                .collect(Collectors.toMap(ArticleCommentResponse::id, Function.identity()));
+
+        map.values().stream().filter(ArticleCommentResponse::hasParentComment)
+                .forEach(comment->{//최상위 부모 댓글만 필터링으로 컬랙션
+                    ArticleCommentResponse parentComment = map.get(comment.parentCommentId());
+                    parentComment.childComments().add(comment);
+                });
+
+        return map.values().stream()
+                .filter(comment -> !comment.hasParentComment())
+                .collect(Collectors.toCollection(() ->
+                        new TreeSet<>(Comparator
+                                .comparing(ArticleCommentResponse::createdAt)
+                                .reversed()
+                                .thenComparingLong(ArticleCommentResponse::id)
+                        )
+                ));
+
     }
 
 }
