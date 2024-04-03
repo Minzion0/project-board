@@ -30,6 +30,7 @@ Spring Boot
 * ~~Heroku~~
 * AWS
 * EC2
+* RDS
 
 ## 데모 페이지
  url : http://13.125.120.130:8080/
