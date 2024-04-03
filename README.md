@@ -34,5 +34,9 @@ Spring Boot
 ## 데모 페이지
  url : http://13.125.120.130:8080/
 
+## ERD
+
+https://github.com/Minzion0/project-board/blob/main/document/project-board-erd.svg
+
 
 
