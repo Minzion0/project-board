@@ -18,6 +18,7 @@ Spring Boot
 * Thymeleaf
 * Spring Security
 * H2 Database
+* Postgresql 
 * mariadb Driver
 * Lombok
 * Spring Boot DevTools
