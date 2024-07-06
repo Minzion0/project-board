@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Objects;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Getter
 @ToString(callSuper = true)

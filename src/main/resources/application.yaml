@@ -18,6 +18,7 @@ logging:
 spring:
 
   datasource:
+    driver-class-name: org.postgresql.Driver
     url: ${LOCAL_DB_URL}
     username: ${LOCAL_DB_USERNAME}
     password: ${LOCAL_DB_PASSWORD}
@@ -64,7 +65,7 @@ spring:
   config.activate.on-profile: heroku
   datasource:
     url: ${JAWSDB_MARIA_URL}
-    driver-class-name: org.mariadb.jdbc.Driver
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: create
